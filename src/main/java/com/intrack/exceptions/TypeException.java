@@ -3,23 +3,23 @@ package com.intrack.exceptions;
 /**
  * @author intrack
  */
-public class TypeExecption extends PersistenceException {
+public class TypeException extends PersistenceException {
 
     private static final long serialVersionUID = 8614420898975117130L;
 
-    public TypeExecption() {
+    public TypeException() {
         super();
     }
 
-    public TypeExecption(String message) {
+    public TypeException(String message) {
         super(message);
     }
 
-    public TypeExecption(String message, Throwable cause) {
+    public TypeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public TypeExecption(Throwable cause) {
+    public TypeException(Throwable cause) {
         super(cause);
     }
 
