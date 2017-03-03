@@ -1,7 +1,6 @@
 package com.intrack.type;
 
 import com.intrack.exceptions.ResultMapException;
-import com.intrack.exceptions.TypeException;
 import com.intrack.session.Configuration;
 
 import java.sql.CallableStatement;

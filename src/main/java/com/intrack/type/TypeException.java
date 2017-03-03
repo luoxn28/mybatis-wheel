@@ -1,4 +1,6 @@
-package com.intrack.exceptions;
+package com.intrack.type;
+
+import com.intrack.exceptions.PersistenceException;
 
 /**
  * @author intrack
