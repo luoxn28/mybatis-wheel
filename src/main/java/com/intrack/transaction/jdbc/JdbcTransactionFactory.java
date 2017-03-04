@@ -1,8 +1,8 @@
-package com.intrack.session.transaction.jdbc;
+package com.intrack.transaction.jdbc;
 
-import com.intrack.session.transaction.Transaction;
-import com.intrack.session.transaction.TransactionFactory;
-import com.intrack.session.transaction.TransactionIsolationLevel;
+import com.intrack.transaction.Transaction;
+import com.intrack.transaction.TransactionFactory;
+import com.intrack.transaction.TransactionIsolationLevel;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

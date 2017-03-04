@@ -1,4 +1,4 @@
-package com.intrack.session.transaction;
+package com.intrack.transaction;
 
 import java.sql.Connection;
 
