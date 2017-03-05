@@ -3,6 +3,7 @@ package com.intrack.session;
 import com.intrack.cursor.Cursor;
 
 import java.io.Closeable;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +101,81 @@ public interface SqlSession extends Closeable {
      */
     void select(String statement, Object parameter, ResultHandler resultHandler);
 
+    /**
+     * Retrieve a single row mapped from the statement key and parameter using
+     * a ResultHandler and RowBounds.
+     */
+    void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler);
+
+    /**
+     * Execute an insert statement.
+     */
+    int insert(String statement);
+
+    /**
+     * Execute an insert statement with parameter.
+     */
+    int insert(String statement, Object parameter);
+
+    /**
+     * Execute an update statement.
+     */
+    int update(String statement);
+
+    /**
+     * Execute on update statement with parameter.
+     */
+    int update(String statement, Object parameter);
+
+    /**
+     * Execute an delete statement.
+     */
+    int delete(String statement);
+
+    /**
+     * Execute an delete statement with parameter.
+     */
+    int delete(String statement, Object parameter);
+
+    /**
+     * Flushes batch statement and commits database connection.
+     */
+    void commit();
+
+    /**
+     * Discards pending batch statements and rolls database connection back.
+     */
+    void rollback();
+
+    /**
+     * Flushes batch statements.
+     */
+//    List<BatchResult> flushStatements();
+
+    /**
+     * Close the session.
+     */
     @Override
     void close();
+
+    /**
+     * Clears local session cache.
+     */
+    void clearCache();
+
+    /**
+     * Retrieves current configuration.
+     */
+    Configuration getConfiguration();
+
+    /**
+     * Retrieves a mapper.
+     */
+    <T> T getMapper(Class<T> type);
+
+    /**
+     * Retrieves inner database connection.
+     */
+    Connection getConnection();
 
 }
