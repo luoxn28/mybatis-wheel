@@ -1,7 +1,5 @@
 package com.intrack.type;
 
-import com.intrack.exceptions.TypeExecption;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -31,7 +29,7 @@ public abstract class TypeReference<T> {
                 return getSupperclassTypeParameter(clazz.getSuperclass());
             }
 
-            throw new TypeExecption("." + getClass() + "' extends TypeReference but misses the type parameter." +
+            throw new TypeException("." + getClass() + "' extends TypeReference but misses the type parameter." +
                                     " Remove the extension or add a type parameter to it.");
         }
 
