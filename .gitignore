@@ -14,5 +14,6 @@ hs_err_pid*
 # Project relation
 mybatis-wheel.iml
 .idea
+src/main/java/com/intrack/test
 src/test/
 target/
