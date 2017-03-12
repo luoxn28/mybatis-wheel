@@ -19,15 +19,23 @@ public class TestMain {
         String password = "123456";
         Connection connection = (Connection) DriverManager.getConnection(url, username, password);
 
+        TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
         Statement statement = (Statement) connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from users");
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from users where id > ?");
+
+        TypeHandler<Integer> integerTypeHandler = (TypeHandler<Integer>) typeHandlerRegistry.getTypeHandler(Integer.class);
+
+        integerTypeHandler.setParameter(preparedStatement, 1, Integer.valueOf(1), null);
+        preparedStatement.executeQuery();
+        //ResultSet resultSet = statement.executeQuery("select * from users");
+
+        ResultSet resultSet = preparedStatement.getResultSet();
 
         /* Get resultSet metadata */
         ResultSetMetaData metaData = resultSet.getMetaData();
         List<TypeHandler<?>> typeHandlers = new ArrayList<>();
         int column = metaData.getColumnCount();
 
-        TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
         for (int i = 1; i <= column; i++) {
             JdbcType jdbcType = JdbcType.forCode(metaData.getColumnType(i));
             typeHandlers.add(typeHandlerRegistry.getTypeHandler(jdbcType));
