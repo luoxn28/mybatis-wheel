@@ -1,3 +1,6 @@
+import com.intrack.executor.resultset.DefaultResultSetHandler;
+import com.intrack.executor.resultset.ResultSetHandler;
+import com.intrack.executor.resultset.ResultSetWrapper;
 import com.intrack.type.JdbcType;
 import com.intrack.type.TypeHandler;
 import com.intrack.type.TypeHandlerRegistry;
@@ -29,25 +32,30 @@ public class TestMain {
         preparedStatement.executeQuery();
         //ResultSet resultSet = statement.executeQuery("select * from users");
 
-        ResultSet resultSet = preparedStatement.getResultSet();
+//        ResultSet resultSet = preparedStatement.getResultSet();
+//
+//        /* Get resultSet metadata */
+//        ResultSetMetaData metaData = resultSet.getMetaData();
+//        List<TypeHandler<?>> typeHandlers = new ArrayList<>();
+//        int column = metaData.getColumnCount();
+//
+//        for (int i = 1; i <= column; i++) {
+//            JdbcType jdbcType = JdbcType.forCode(metaData.getColumnType(i));
+//            typeHandlers.add(typeHandlerRegistry.getTypeHandler(jdbcType));
+//        }
+//        while (resultSet.next()) {
+//            //System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2));
+//
+//            for (int i = 1; i <= typeHandlers.size(); i++) {
+//                TypeHandler typeHandler = typeHandlers.get(i - 1);
+//                System.out.println(typeHandler.getResult(resultSet, i));
+//            }
+//            System.out.println("---------------------");
+//        }
 
-        /* Get resultSet metadata */
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        List<TypeHandler<?>> typeHandlers = new ArrayList<>();
-        int column = metaData.getColumnCount();
+        ResultSetWrapper resultSetWrapper = new ResultSetWrapper(preparedStatement);
+        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(resultSetWrapper);
 
-        for (int i = 1; i <= column; i++) {
-            JdbcType jdbcType = JdbcType.forCode(metaData.getColumnType(i));
-            typeHandlers.add(typeHandlerRegistry.getTypeHandler(jdbcType));
-        }
-        while (resultSet.next()) {
-            //System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2));
-
-            for (int i = 1; i <= typeHandlers.size(); i++) {
-                TypeHandler typeHandler = typeHandlers.get(i - 1);
-                System.out.println(typeHandler.getResult(resultSet, i));
-            }
-            System.out.println("---------------------");
-        }
+        resultSetHandler.handlerResultSets(preparedStatement);
     }
 }

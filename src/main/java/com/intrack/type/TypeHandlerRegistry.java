@@ -18,12 +18,12 @@ public class TypeHandlerRegistry {
      *      type + type handler
      * jdbc type + type handler
      */
-    private final Map<Type, TypeHandler<?>> TYPE_HANDLER_MAP = new ConcurrentHashMap<>();
-    private final Map<JdbcType, TypeHandler<?>> JDBCTYPE_HANDLER_MAP = new ConcurrentHashMap<>();
+    private static final Map<Type, TypeHandler<?>> TYPE_HANDLER_MAP = new ConcurrentHashMap<>();
+    private static final Map<JdbcType, TypeHandler<?>> JDBCTYPE_HANDLER_MAP = new ConcurrentHashMap<>();
     //private final Map<Type, Map<JdbcType, TypeHandler<?>>> TYPE_HANDLER_MAP = new ConcurrentHashMap<>();
 
     /* add all type handler */
-    {
+    static {
         register(Byte.class, JdbcType.ARRAY, new ByteTypeHandler());
         register(Character.class, JdbcType.CHAR, new CharacterTypeHandler());
         register(Double.class, JdbcType.DOUBLE, new DoubleTypeHandler());
@@ -35,7 +35,7 @@ public class TypeHandlerRegistry {
         register(String.class, JdbcType.VARCHAR, new StringTypeHandler());
     }
 
-    public TypeHandler<?> getTypeHandler(Type type) {
+    public static TypeHandler<?> getTypeHandler(Type type) {
         TypeHandler<?> typeHandler = null;
 
         typeHandler = TYPE_HANDLER_MAP.get(type);
@@ -46,7 +46,7 @@ public class TypeHandlerRegistry {
         return typeHandler;
     }
 
-    public TypeHandler<?> getTypeHandler(JdbcType jdbcType) {
+    public static TypeHandler<?> getTypeHandler(JdbcType jdbcType) {
         TypeHandler<?> typeHandler = null;
 
         typeHandler = JDBCTYPE_HANDLER_MAP.get(jdbcType);
@@ -59,11 +59,11 @@ public class TypeHandlerRegistry {
 
     // private scope
 
-    private <T> void register(Class clazz, JdbcType jdbcType, TypeHandler<T> typeHandler) {
+    private static <T> void register(Class clazz, JdbcType jdbcType, TypeHandler<T> typeHandler) {
         register((Type) clazz, jdbcType, typeHandler);
     }
 
-    private <T> void register(Type type, JdbcType jdbcType, TypeHandler<T> typeHandler) {
+    private static <T> void register(Type type, JdbcType jdbcType, TypeHandler<T> typeHandler) {
         TYPE_HANDLER_MAP.put(type, typeHandler);
         JDBCTYPE_HANDLER_MAP.put(jdbcType, typeHandler);
     }
