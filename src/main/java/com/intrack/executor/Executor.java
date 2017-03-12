@@ -5,7 +5,7 @@ import com.intrack.session.ResultHandler;
 /**
  * @author intrack
  */
-public class Executor {
+public interface Executor {
 
     ResultHandler NO_RESULT_HANDLER = null;
 
