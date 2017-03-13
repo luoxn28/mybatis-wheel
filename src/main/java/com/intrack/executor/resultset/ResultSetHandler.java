@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ResultSetHandler {
 
-    <E> List<E> handlerResultSets(Statement statement, Class<?> clazz) throws SQLException;
+    <E> List<E> handlerResultSets(Class<?> clazz) throws SQLException;
 
     <E> Cursor<E> handleCursorResultSets(Statement statement) throws SQLException;
 

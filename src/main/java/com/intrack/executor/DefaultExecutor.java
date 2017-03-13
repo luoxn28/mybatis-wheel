@@ -7,7 +7,6 @@ import com.intrack.executor.statement.DefaultStatementHandler;
 import com.intrack.executor.statement.StatementHandler;
 import com.intrack.session.Configuration;
 import com.intrack.test.User;
-import com.intrack.type.TypeHandlerRegistry;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -55,7 +54,7 @@ public class DefaultExecutor implements Executor {
 
         List<User> userList = null;
         try {
-            userList = resultSetHandler.handlerResultSets(preparedStatement, User.class);
+            userList = resultSetHandler.handlerResultSets(User.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

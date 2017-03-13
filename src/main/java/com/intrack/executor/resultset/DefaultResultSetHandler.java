@@ -26,7 +26,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     @Override
-    public <E> List<E> handlerResultSets(Statement statement, Class<?> clazz) throws SQLException {
+    public <E> List<E> handlerResultSets(Class<?> clazz) throws SQLException {
         List<E> resultList = new ArrayList<>();
         List<TypeHandler<?>> typeHandlers = resultSetWrapper.getTypeHandlers();
         List<String> columnNames = resultSetWrapper.getColumnNames();
