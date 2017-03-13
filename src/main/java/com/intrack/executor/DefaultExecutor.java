@@ -3,6 +3,8 @@ package com.intrack.executor;
 import com.intrack.executor.resultset.DefaultResultSetHandler;
 import com.intrack.executor.resultset.ResultSetHandler;
 import com.intrack.executor.resultset.ResultSetWrapper;
+import com.intrack.executor.statement.DefaultStatementHandler;
+import com.intrack.executor.statement.StatementHandler;
 import com.intrack.session.Configuration;
 import com.intrack.test.User;
 import com.intrack.type.TypeHandlerRegistry;
@@ -19,6 +21,7 @@ import java.util.List;
 public class DefaultExecutor implements Executor {
 
     private Configuration  configuration;
+    private StatementHandler statementHandler = new DefaultStatementHandler();
 
     public DefaultExecutor(Configuration configuration) {
         this.configuration = configuration;
@@ -41,13 +44,12 @@ public class DefaultExecutor implements Executor {
 
         try {
             connection = DriverManager.getConnection(url, username, password);
-            preparedStatement = connection.prepareStatement(statementSql);
+            preparedStatement = connection.prepareStatement(statementHandler.prepare(statementSql, null));
             preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
         ResultSetWrapper resultSetWrapper = new ResultSetWrapper(preparedStatement);
         ResultSetHandler resultSetHandler = new DefaultResultSetHandler(resultSetWrapper);
 
