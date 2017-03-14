@@ -17,7 +17,8 @@ public class MappedStatement {
     private static final HashMap<String, String> statements = new HashMap<>();
 
     static {
-        statements.put("com.intrack.test.User.getUser", "select * from users where id > 1");
+        statements.put("com.intrack.test.User.getUser", "select * from users where id = 1");
+        statements.put("com.intrack.test.User.getUserById", "select * from users where id = ?");
     }
 
     private MappedStatement() { }

@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class DoubleTypeHandler extends BaseTypeHandler<Double> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Double parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
-        statement.setDouble(i, parameter);
+        statement.setDouble(i, (Double) parameter);
     }
 
     @Override

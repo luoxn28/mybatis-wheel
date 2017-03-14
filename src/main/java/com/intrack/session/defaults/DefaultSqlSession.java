@@ -5,6 +5,7 @@ import com.intrack.executor.Executor;
 import com.intrack.session.Configuration;
 import com.intrack.session.RowBounds;
 import com.intrack.session.SqlSession;
+import com.intrack.session.SqlSessionException;
 
 import java.util.List;
 
@@ -23,13 +24,21 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T selectOne(String statement) {
-        List<T> resultList = executor.query(statement);
-        return resultList.get(0);
+        return selectOne(statement, null);
     }
 
     @Override
     public <T> T selectOne(String statement, Object parameter) {
-        return null;
+        List<T> resultList = executor.query(statement, parameter);
+        if (resultList.size() > 1) {
+            throw new SqlSessionException("selectOne resultList size > 1");
+        }
+
+        if (resultList.isEmpty()) {
+            return null;
+        } else {
+            return resultList.get(0);
+        }
     }
 
 

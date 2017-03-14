@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class LongTypeHandler extends BaseTypeHandler<Long> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Long parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
-        statement.setLong(i, parameter);
+        statement.setLong(i, (Long) parameter);
     }
 
     @Override

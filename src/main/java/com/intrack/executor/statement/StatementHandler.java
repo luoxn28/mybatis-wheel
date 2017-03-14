@@ -1,5 +1,8 @@
 package com.intrack.executor.statement;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /**
  * statement handler
  * 解析statement，组合成完整的statement
@@ -8,6 +11,7 @@ package com.intrack.executor.statement;
  */
 public interface StatementHandler {
 
-    String prepare(String statementPath, Object parameter);
+    void resetStartIndex();
+    void prepare(PreparedStatement preparedStatement, Object parameter) throws SQLException;
 
 }

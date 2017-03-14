@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class FloatTypeHandler extends BaseTypeHandler<Float> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Float parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
-        statement.setDouble(i, parameter);
+        statement.setDouble(i, (Float) parameter);
     }
 
     @Override

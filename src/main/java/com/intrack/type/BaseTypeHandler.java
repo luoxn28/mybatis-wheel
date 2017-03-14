@@ -20,7 +20,7 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
     }
 
     @Override
-    public void setParameter(PreparedStatement statement, int i, T parameter, JdbcType jdbcType) throws SQLException {
+    public void setParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType) throws SQLException {
         if (parameter == null) {
             if (jdbcType == null) {
                 throw new TypeException("JDBC requires that the JdbcType must be specified for all nullable parameters.");
@@ -91,7 +91,7 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
         }
     }
 
-    public abstract void setNonNullParameter(PreparedStatement statement, int i, T parameter, JdbcType jdbcType) throws SQLException;
+    public abstract void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType) throws SQLException;
 
     public abstract T getNullableResult(ResultSet resultSet, String columnIndex) throws SQLException;
 

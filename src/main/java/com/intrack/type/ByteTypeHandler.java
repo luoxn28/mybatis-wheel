@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class ByteTypeHandler extends BaseTypeHandler<Byte> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Byte parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
-        statement.setByte(i, parameter);
+        statement.setByte(i, (Byte) parameter);
     }
 
     @Override

@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class ShortTypeHandler extends BaseTypeHandler<Short> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Short parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
-        statement.setShort(i, parameter);
+        statement.setShort(i, (Short) parameter);
     }
 
     @Override

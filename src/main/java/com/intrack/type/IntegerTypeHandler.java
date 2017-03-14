@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class IntegerTypeHandler extends BaseTypeHandler<Integer> {
 
     @Override
-    public void setNonNullParameter(PreparedStatement statement, int i, Integer parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement statement, int i, Object parameter, JdbcType jdbcType)
         throws SQLException {
-        statement.setInt(i, parameter);
+        statement.setInt(i, (Integer) parameter);
     }
 
     @Override

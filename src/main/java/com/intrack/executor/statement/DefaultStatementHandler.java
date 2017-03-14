@@ -1,7 +1,11 @@
 package com.intrack.executor.statement;
 
 import com.intrack.mapping.MappedStatement;
+import com.intrack.type.TypeHandler;
+import com.intrack.type.TypeHandlerRegistry;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -9,17 +13,22 @@ import java.sql.Statement;
  */
 public class DefaultStatementHandler implements StatementHandler {
 
-    private MappedStatement mappedStatement = MappedStatement.instance();
+    private int startIndex = 1;
 
     @Override
-    public String prepare(String statementPath, Object parameter) {
-        String statement = mappedStatement.getStatement(statementPath);
+    public void resetStartIndex() {
+        startIndex = 1;
+    }
 
+    @Override
+    public void prepare(PreparedStatement preparedStatement, Object parameter) throws SQLException {
         if (parameter == null) {
-            return statement;
+            return;
         }
 
-        return statement;
+        TypeHandler<?> typeHandler = TypeHandlerRegistry.getTypeHandler(parameter.getClass());
+
+        typeHandler.setParameter(preparedStatement, startIndex++, parameter, null);
     }
 
 }

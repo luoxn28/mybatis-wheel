@@ -56,4 +56,8 @@ public class ResultSetWrapper {
         return this.columnNames;
     }
 
+    public void close() throws SQLException {
+        resultSet.close();
+    }
+
 }
