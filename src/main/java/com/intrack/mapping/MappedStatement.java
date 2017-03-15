@@ -22,6 +22,10 @@ public class MappedStatement {
         statements.put("com.intrack.test.User.getUsersById", "select * from users where id > ?");
 
         statements.put("com.intrack.test.User.insertOne", "insert users (id, name) value(5, 'kai')");
+        statements.put("com.intrack.test.User.insertOneById", "insert users (id, name) value(?, 'kai')");
+
+        statements.put("com.intrack.test.User.deleteOne", "delete from users where id = 5");
+        statements.put("com.intrack.test.User.deleteOneById", "delete from users where id = ?");
     }
 
     private MappedStatement() { }

@@ -126,17 +126,17 @@ public interface SqlSession extends Closeable {
 //     * Execute on update statement with parameter.
 //     */
 //    int update(String statement, Object parameter);
-//
-//    /**
-//     * Execute an delete statement.
-//     */
-//    int delete(String statement);
-//
-//    /**
-//     * Execute an delete statement with parameter.
-//     */
-//    int delete(String statement, Object parameter);
-//
+
+    /**
+     * Execute an delete statement.
+     */
+    int delete(String statement);
+
+    /**
+     * Execute an delete statement with parameter.
+     */
+    int delete(String statement, Object parameter);
+
 //    /**
 //     * Flushes batch statement and commits database connection.
 //     */

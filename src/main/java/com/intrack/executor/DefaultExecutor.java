@@ -77,6 +77,15 @@ public class DefaultExecutor implements Executor {
 
     @Override
     public int insert(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    @Override
+    public int delete(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    private int updateInternal(String statement, Object parameter) {
         int updateResult = 0;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
