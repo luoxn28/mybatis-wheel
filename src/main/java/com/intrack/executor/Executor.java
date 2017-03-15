@@ -13,4 +13,5 @@ public interface Executor {
 
     <E> List<E> query(String statement, Object parameter);
 
+    int insert(String statement, Object parameter);
 }

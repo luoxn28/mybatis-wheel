@@ -28,8 +28,8 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public <T> T selectOne(String statement, Object parameter) {
-        List<T> resultList = executor.query(statement, parameter);
+    public <E> E selectOne(String statement, Object parameter) {
+        List<E> resultList = executor.query(statement, parameter);
         if (resultList.size() > 1) {
             throw new SqlSessionException("selectOne resultList size > 1");
         }
@@ -44,17 +44,22 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <E> List<E> selectList(String statement) {
-        return null;
+        return selectList(statement, null);
     }
 
     @Override
     public <E> List<E> selectList(String statement, Object parameter) {
-        return null;
+        return executor.query(statement, parameter);
     }
 
     @Override
-    public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
-        return null;
+    public int insert(String statement) {
+        return insert(statement, null);
+    }
+
+    @Override
+    public int insert(String statement, Object parameter) {
+        return executor.insert(statement, parameter);
     }
 
     @Override

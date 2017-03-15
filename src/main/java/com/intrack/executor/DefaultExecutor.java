@@ -75,4 +75,31 @@ public class DefaultExecutor implements Executor {
         return (List<E>) userList;
     }
 
+    @Override
+    public int insert(String statement, Object parameter) {
+        int updateResult = 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statement));
+
+            statementHandler.resetStartIndex();
+            statementHandler.prepare(preparedStatement, parameter);
+            updateResult = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return updateResult;
+    }
+
 }

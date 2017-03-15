@@ -45,7 +45,7 @@ public interface SqlSession extends Closeable {
      * within the specified row bounds.
      * <E> The return list element type.
      */
-    <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds);
+//    <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds);
 
 //    /**
 //     * THe selectMap is a special case in that ti is designed to convert a list of results
@@ -107,15 +107,15 @@ public interface SqlSession extends Closeable {
 //     */
 //    void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler);
 //
-//    /**
-//     * Execute an insert statement.
-//     */
-//    int insert(String statement);
-//
-//    /**
-//     * Execute an insert statement with parameter.
-//     */
-//    int insert(String statement, Object parameter);
+    /**
+     * Execute an insert statement.
+     */
+    int insert(String statement);
+
+    /**
+     * Execute an insert statement with parameter.
+     */
+    int insert(String statement, Object parameter);
 //
 //    /**
 //     * Execute an update statement.

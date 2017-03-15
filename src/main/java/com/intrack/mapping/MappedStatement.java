@@ -19,6 +19,9 @@ public class MappedStatement {
     static {
         statements.put("com.intrack.test.User.getUser", "select * from users where id = 1");
         statements.put("com.intrack.test.User.getUserById", "select * from users where id = ?");
+        statements.put("com.intrack.test.User.getUsersById", "select * from users where id > ?");
+
+        statements.put("com.intrack.test.User.insertOne", "insert users (id, name) value(5, 'kai')");
     }
 
     private MappedStatement() { }
