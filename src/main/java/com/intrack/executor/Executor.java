@@ -15,6 +15,8 @@ public interface Executor {
 
     int insert(String statement, Object parameter);
 
+    int update(String statement, Object parameter);
+
     int delete(String statement, Object parameter);
 
 }

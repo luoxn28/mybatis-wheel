@@ -88,6 +88,11 @@ public class DefaultExecutor implements Executor {
     }
 
     @Override
+    public int update(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    @Override
     public int delete(String statement, Object parameter) {
         return updateInternal(statement, parameter);
     }

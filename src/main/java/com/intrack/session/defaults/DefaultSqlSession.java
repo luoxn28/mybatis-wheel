@@ -63,6 +63,16 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
+    public int update(String statement) {
+        return update(statement, null);
+    }
+
+    @Override
+    public int update(String statement, Object parameter) {
+        return executor.update(statement, parameter);
+    }
+
+    @Override
     public int delete(String statement) {
         return delete(statement, null);
     }
