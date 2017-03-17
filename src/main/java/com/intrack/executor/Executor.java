@@ -19,4 +19,6 @@ public interface Executor {
 
     int delete(String statement, Object parameter);
 
+    void clearCache();
+
 }

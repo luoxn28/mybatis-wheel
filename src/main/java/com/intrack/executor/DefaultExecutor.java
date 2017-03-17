@@ -1,6 +1,7 @@
 package com.intrack.executor;
 
 import com.intrack.executor.cache.Cache;
+import com.intrack.executor.cache.DefaultCache;
 import com.intrack.executor.resultset.DefaultResultSetHandler;
 import com.intrack.executor.resultset.ResultSetHandler;
 import com.intrack.executor.resultset.ResultSetWrapper;
@@ -37,9 +38,10 @@ public class DefaultExecutor implements Executor {
     private Configuration configuration;
     private StatementHandler statementHandler = new DefaultStatementHandler();
 
-
-
     private Transaction transaction = new JdbcTransactionFactory().newTransaction(dataSource, null, true);
+
+    /* 一级缓存 */
+    private Cache localCache = new DefaultCache();
 
     public DefaultExecutor(Configuration configuration) {
         this.configuration = configuration;
@@ -51,13 +53,20 @@ public class DefaultExecutor implements Executor {
         PreparedStatement preparedStatement = null;
 
         MappedStatement mappedStatement = configuration.getMappedStatement(statementSql);
+        /* 查询二级缓存 */
         Cache cache = mappedStatement.getCache();
+        Integer hashCode = createHashcode(statementSql, parameter);
         if (cache != null) {
-            Integer hashCode = createHashcode(statementSql, parameter);
             List<E> cacheResult = (List<E>) cache.getCacheObject(hashCode);
             if (cacheResult != null) {
                 return cacheResult;
             }
+        }
+
+        /* 查询一级缓存 */
+        List<E> localCacheResult = (List<E>) localCache.getCacheObject(hashCode);
+        if (localCacheResult != null) {
+            return localCacheResult;
         }
 
         try {
@@ -89,8 +98,14 @@ public class DefaultExecutor implements Executor {
             }
         }
 
-        cache.putObject(createHashcode(statementSql, parameter), userList);
-        return (List<E>) userList;
+        /**
+         * localCache: 一级缓存写入数据
+         * cache: 二级缓存写入数据
+         * 一级二级缓存资料参考: http://www.360doc.com/content/15/1205/07/29475794_518018352.shtml
+         */
+        localCache.putObject(hashCode, userList);
+        cache.putObject(hashCode, userList);
+        return userList;
     }
 
     @Override
@@ -108,10 +123,20 @@ public class DefaultExecutor implements Executor {
         return updateInternal(statement, parameter);
     }
 
+    @Override
+    public void clearCache() {
+        localCache.clear();
+    }
+
+    // ----------------------------------------------------- private scope
+
     private int updateInternal(String statement, Object parameter) {
         int updateResult = 0;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+
+        /* 清空一级缓存 */
+        localCache.clear();
 
         try {
             MappedStatement mappedStatement = configuration.getMappedStatement(statement);

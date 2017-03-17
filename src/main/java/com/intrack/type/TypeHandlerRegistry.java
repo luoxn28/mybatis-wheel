@@ -57,7 +57,7 @@ public class TypeHandlerRegistry {
         return typeHandler;
     }
 
-    // private scope
+    // ----------------------------------------------------- private scope
 
     private static <T> void register(Class clazz, JdbcType jdbcType, TypeHandler<T> typeHandler) {
         register((Type) clazz, jdbcType, typeHandler);
