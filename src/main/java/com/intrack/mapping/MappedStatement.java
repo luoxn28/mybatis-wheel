@@ -1,8 +1,13 @@
 package com.intrack.mapping;
 
+import com.intrack.executor.cache.Cache;
+import com.intrack.executor.cache.DefaultCache;
 import com.intrack.type.MappedTypes;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * store all statement
@@ -12,28 +17,25 @@ import java.util.HashMap;
  */
 public class MappedStatement {
 
-    private static MappedStatement mappedStatement = new MappedStatement();
+    private final HashMap<String, String> statements = new HashMap<>();
+    private Cache cache = null;
 
-    private static final HashMap<String, String> statements = new HashMap<>();
+    {
+        statements.put("com.intrack.test.UserDao.getUser", "select * from users where id = 1");
+        statements.put("com.intrack.test.UserDao.getUserById", "select * from users where id = ?");
+        statements.put("com.intrack.test.UserDao.getUsersById", "select * from users where id > ?");
 
-    static {
-        statements.put("com.intrack.test.User.getUser", "select * from users where id = 1");
-        statements.put("com.intrack.test.User.getUserById", "select * from users where id = ?");
-        statements.put("com.intrack.test.User.getUsersById", "select * from users where id > ?");
+        statements.put("com.intrack.test.UserDao.insertOne", "insert users (id, name) value(5, 'kai')");
+        statements.put("com.intrack.test.UserDao.insertOneById", "insert users (id, name) value(?, 'kai')");
 
-        statements.put("com.intrack.test.User.insertOne", "insert users (id, name) value(5, 'kai')");
-        statements.put("com.intrack.test.User.insertOneById", "insert users (id, name) value(?, 'kai')");
+        statements.put("com.intrack.test.UserDao.updateOne", "update users set name = ? where id = 2");
 
-        statements.put("com.intrack.test.User.updateOne", "update users set name = ? where id = 2");
-
-        statements.put("com.intrack.test.User.deleteOne", "delete from users where id = 5");
-        statements.put("com.intrack.test.User.deleteOneById", "delete from users where id = ?");
+        statements.put("com.intrack.test.UserDao.deleteOne", "delete from users where id = 5");
+        statements.put("com.intrack.test.UserDao.deleteOneById", "delete from users where id = ?");
     }
 
-    private MappedStatement() { }
-
-    public static MappedStatement instance() {
-        return mappedStatement;
+    public MappedStatement() {
+        cache = new DefaultCache();
     }
 
     public String getStatement(String key) {
@@ -43,6 +45,10 @@ public class MappedStatement {
         }
 
         return value;
+    }
+
+    public Cache getCache() {
+        return cache;
     }
 
 }

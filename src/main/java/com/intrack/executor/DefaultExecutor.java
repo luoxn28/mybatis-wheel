@@ -1,5 +1,6 @@
 package com.intrack.executor;
 
+import com.intrack.executor.cache.Cache;
 import com.intrack.executor.resultset.DefaultResultSetHandler;
 import com.intrack.executor.resultset.ResultSetHandler;
 import com.intrack.executor.resultset.ResultSetWrapper;
@@ -34,7 +35,6 @@ public class DefaultExecutor implements Executor {
     }
 
     private Configuration configuration;
-    private MappedStatement mappedStatement = MappedStatement.instance();
     private StatementHandler statementHandler = new DefaultStatementHandler();
 
 
@@ -50,6 +50,16 @@ public class DefaultExecutor implements Executor {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
+        MappedStatement mappedStatement = configuration.getMappedStatement(statementSql);
+        Cache cache = mappedStatement.getCache();
+        if (cache != null) {
+            Integer hashCode = createHashcode(statementSql, parameter);
+            List<E> cacheResult = (List<E>) cache.getCacheObject(hashCode);
+            if (cacheResult != null) {
+                return cacheResult;
+            }
+        }
+
         try {
             connection = transaction.getConnection();
             preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statementSql));
@@ -64,7 +74,7 @@ public class DefaultExecutor implements Executor {
         ResultSetWrapper resultSetWrapper = new ResultSetWrapper(preparedStatement);
         ResultSetHandler resultSetHandler = new DefaultResultSetHandler(resultSetWrapper);
 
-        List<User> userList = null;
+        List<E> userList = null;
         try {
             userList = resultSetHandler.handlerResultSets(User.class);
         } catch (SQLException e) {
@@ -79,6 +89,7 @@ public class DefaultExecutor implements Executor {
             }
         }
 
+        cache.putObject(createHashcode(statementSql, parameter), userList);
         return (List<E>) userList;
     }
 
@@ -103,6 +114,8 @@ public class DefaultExecutor implements Executor {
         PreparedStatement preparedStatement = null;
 
         try {
+            MappedStatement mappedStatement = configuration.getMappedStatement(statement);
+
             connection = transaction.getConnection();
             preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statement));
 
@@ -121,6 +134,14 @@ public class DefaultExecutor implements Executor {
         }
 
         return updateResult;
+    }
+
+    private int createHashcode(String statement, Object parameter) {
+        if (parameter == null) {
+            return statement.hashCode();
+        }
+
+        return statement.hashCode() * parameter.hashCode() + statement.hashCode() % 16;
     }
 
 }

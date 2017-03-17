@@ -159,7 +159,7 @@ public interface SqlSession extends Closeable {
     void close();
 //
 //    /**
-//     * Clears local session cache.
+//     * Clears local session Cache.
 //     */
 //    void clearCache();
 //

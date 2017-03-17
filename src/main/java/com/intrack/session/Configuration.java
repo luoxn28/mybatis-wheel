@@ -1,6 +1,10 @@
 package com.intrack.session;
 
 import com.intrack.mapping.Environment;
+import com.intrack.mapping.MappedStatement;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author intrack
@@ -9,7 +13,13 @@ public class Configuration {
 
     protected Environment environment;
 
+    protected Map<String, MappedStatement> mappedStatementMap = new ConcurrentHashMap<>();
+
     protected ExecutorType executorType = getDefaultExecutorType();
+
+    {
+        mappedStatementMap.put("com.intrack.test.UserDao", new MappedStatement());
+    }
 
     public void setEnvironment(Environment environment) {
         this.environment = environment;
@@ -17,6 +27,17 @@ public class Configuration {
 
     public ExecutorType getDefaultExecutorType() {
         return ExecutorType.SIMPLE;
+    }
+
+    public MappedStatement getMappedStatement(String statement) {
+        String namespace = statement.substring(0, statement.lastIndexOf('.'));
+
+        MappedStatement mappedStatement = mappedStatementMap.get(namespace);
+        if (mappedStatement == null) {
+            throw new SqlSessionException("Configuration getMappedStatement null");
+        }
+
+        return mappedStatement;
     }
 
 }
