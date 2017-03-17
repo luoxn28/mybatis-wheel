@@ -73,7 +73,7 @@ public class DefaultExecutor implements Executor {
             try {
                 resultSetWrapper.close();
                 preparedStatement.close();
-                connection.close();
+                transaction.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -109,7 +109,7 @@ public class DefaultExecutor implements Executor {
         } finally {
             try {
                 preparedStatement.close();
-                connection.close();
+                transaction.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

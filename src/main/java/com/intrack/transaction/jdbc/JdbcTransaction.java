@@ -1,5 +1,8 @@
 package com.intrack.transaction.jdbc;
 
+import com.intrack.executor.ExecutorException;
+import com.intrack.executor.connection.ConnectionPool;
+import com.intrack.executor.connection.DefaultConnectionPoll;
 import com.intrack.logging.Log;
 import com.intrack.logging.LogFactory;
 import com.intrack.transaction.Transaction;
@@ -22,14 +25,22 @@ public class JdbcTransaction implements Transaction {
     protected TransactionIsolationLevel level;
     protected boolean autoCommit;
 
+    private ConnectionPool connectionPool;
+
     public JdbcTransaction(Connection conn) {
         this.connection = conn;
     }
 
     public JdbcTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit) {
+        if (dataSource == null) {
+            throw new ExecutorException("dataSource is null");
+        }
+
         this.dataSource = dataSource;
         this.level = level;
         this.autoCommit = autoCommit;
+
+        this.connectionPool = new DefaultConnectionPoll(dataSource);
     }
 
     @Override
@@ -69,7 +80,8 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Closing JDBC Connection [" + connection + "]");
             }
 
-            connection.close();
+            /* For use connection next time */
+            connectionPool.release(connection);
         }
     }
 
@@ -83,7 +95,7 @@ public class JdbcTransaction implements Transaction {
             log.debug("Opening JDBC Connection.");
         }
 
-        connection = dataSource.getConnection();
+        connection = connectionPool.getConnection();
         if (level != null) {
             connection.setTransactionIsolation(level.getLevel());
         }
