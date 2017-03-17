@@ -34,7 +34,7 @@ public class JdbcTransaction implements Transaction {
 
     @Override
     public Connection getConnection() throws SQLException {
-        if (connection != null) {
+        if (connection == null) {
             openConnection();
         }
 

@@ -9,6 +9,8 @@ import com.intrack.mapping.Environment;
 import com.intrack.mapping.MappedStatement;
 import com.intrack.session.Configuration;
 import com.intrack.test.User;
+import com.intrack.transaction.Transaction;
+import com.intrack.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
@@ -22,20 +24,25 @@ import java.util.List;
  */
 public class DefaultExecutor implements Executor {
 
-    private Configuration configuration;
-    private MappedStatement mappedStatement = MappedStatement.instance();
-    private StatementHandler statementHandler = new DefaultStatementHandler();
-
-    private BasicDataSource dataSource = new BasicDataSource();
-
-    public DefaultExecutor(Configuration configuration) {
-        this.configuration = configuration;
-
+    private static BasicDataSource dataSource = new BasicDataSource();
+    static {
         /* 设置DataSource*/
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://192.168.1.150/ssh_study");
         dataSource.setUsername("luoxn28");
         dataSource.setPassword("123456");
+    }
+
+    private Configuration configuration;
+    private MappedStatement mappedStatement = MappedStatement.instance();
+    private StatementHandler statementHandler = new DefaultStatementHandler();
+
+
+
+    private Transaction transaction = new JdbcTransactionFactory().newTransaction(dataSource, null, true);
+
+    public DefaultExecutor(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
@@ -44,7 +51,7 @@ public class DefaultExecutor implements Executor {
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = dataSource.getConnection();
+            connection = transaction.getConnection();
             preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statementSql));
 
             statementHandler.resetStartIndex();
@@ -91,7 +98,7 @@ public class DefaultExecutor implements Executor {
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = dataSource.getConnection();
+            connection = transaction.getConnection();
             preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statement));
 
             statementHandler.resetStartIndex();
