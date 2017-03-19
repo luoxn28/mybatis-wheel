@@ -7,16 +7,14 @@ import com.intrack.executor.resultset.ResultSetHandler;
 import com.intrack.executor.resultset.ResultSetWrapper;
 import com.intrack.executor.statement.DefaultStatementHandler;
 import com.intrack.executor.statement.StatementHandler;
-import com.intrack.mapping.Environment;
 import com.intrack.mapping.MappedStatement;
 import com.intrack.session.Configuration;
+import com.intrack.session.SqlSessionException;
 import com.intrack.test.User;
 import com.intrack.transaction.Transaction;
 import com.intrack.transaction.jdbc.JdbcTransactionFactory;
-import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,25 +24,24 @@ import java.util.List;
  */
 public class DefaultExecutor implements Executor {
 
-    private static BasicDataSource dataSource = new BasicDataSource();
-    static {
-        /* 设置DataSource*/
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://192.168.1.150/ssh_study");
-        dataSource.setUsername("luoxn28");
-        dataSource.setPassword("123456");
-    }
-
     private Configuration configuration;
-    private StatementHandler statementHandler = new DefaultStatementHandler();
-
-    private Transaction transaction = new JdbcTransactionFactory().newTransaction(dataSource, null, true);
+    private StatementHandler statementHandler;
+    private Transaction transaction;
 
     /* 一级缓存 */
-    private Cache localCache = new DefaultCache();
+    private Cache localCache;
 
     public DefaultExecutor(Configuration configuration) {
+        if (configuration == null) {
+            throw new SqlSessionException("configuration is null");
+        }
+
         this.configuration = configuration;
+        this.statementHandler = new DefaultStatementHandler();
+        this.transaction = new JdbcTransactionFactory().newTransaction(configuration.getDataSource(), null, true);
+
+        /* 设置一级缓存 */
+        localCache = new DefaultCache();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.intrack.session;
 
+import com.intrack.executor.datasource.DefaultDataSource;
 import com.intrack.mapping.Environment;
 import com.intrack.mapping.MappedStatement;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Configuration {
 
     protected Environment environment;
+
+    private static BasicDataSource dataSource = new DefaultDataSource();
 
     protected Map<String, MappedStatement> mappedStatementMap = new ConcurrentHashMap<>();
 
@@ -40,4 +44,11 @@ public class Configuration {
         return mappedStatement;
     }
 
+    public static BasicDataSource getDataSource() {
+        return dataSource;
+    }
+
+    public static void setDataSource(BasicDataSource dataSource) {
+        Configuration.dataSource = dataSource;
+    }
 }
