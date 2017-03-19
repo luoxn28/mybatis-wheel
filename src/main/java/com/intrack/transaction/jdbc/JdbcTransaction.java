@@ -90,6 +90,11 @@ public class JdbcTransaction implements Transaction {
         return null;
     }
 
+    @Override
+    public boolean isAutoCommit() {
+        return autoCommit;
+    }
+
     protected void openConnection() throws SQLException {
         if (log.isDebugEnabled()) {
             log.debug("Opening JDBC Connection.");

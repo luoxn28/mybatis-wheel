@@ -77,6 +77,14 @@ public class DefaultExecutor implements Executor {
             statementHandler.prepare(preparedStatement, parameter);
             preparedStatement.executeQuery();
         } catch (SQLException e) {
+            try {
+                /* Transaction rollback */
+                if (!transaction.isAutoCommit()) {
+                    transaction.rollback();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             e.printStackTrace();
         }
 
@@ -135,9 +143,6 @@ public class DefaultExecutor implements Executor {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        /* 清空一级缓存 */
-        localCache.clear();
-
         try {
             MappedStatement mappedStatement = configuration.getMappedStatement(statement);
 
@@ -148,6 +153,14 @@ public class DefaultExecutor implements Executor {
             statementHandler.prepare(preparedStatement, parameter);
             updateResult = preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            try {
+                /* Transaction rollback */
+                if (!transaction.isAutoCommit()) {
+                    transaction.rollback();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
             try {
@@ -157,6 +170,9 @@ public class DefaultExecutor implements Executor {
                 e.printStackTrace();
             }
         }
+
+        /* 清空一级缓存 */
+        localCache.clear();
 
         return updateResult;
     }

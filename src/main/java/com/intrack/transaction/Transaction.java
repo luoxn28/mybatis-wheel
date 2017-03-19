@@ -21,4 +21,6 @@ public interface Transaction {
      */
     Integer getTimeout() throws SQLException;
 
+    boolean isAutoCommit();
+
 }
