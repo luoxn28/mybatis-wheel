@@ -49,6 +49,32 @@ public class DefaultExecutor implements Executor {
 
     @Override
     public <E> List<E> query(String statementSql, Object parameter) {
+        return queryInternal(statementSql, parameter);
+    }
+
+    @Override
+    public int insert(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    @Override
+    public int update(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    @Override
+    public int delete(String statement, Object parameter) {
+        return updateInternal(statement, parameter);
+    }
+
+    @Override
+    public void clearCache() {
+        localCache.clear();
+    }
+
+    // ----------------------------------------------------- private scope
+
+    private <E> List<E> queryInternal(String statementSql, Object parameter) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -115,28 +141,6 @@ public class DefaultExecutor implements Executor {
         cache.putObject(hashCode, userList);
         return userList;
     }
-
-    @Override
-    public int insert(String statement, Object parameter) {
-        return updateInternal(statement, parameter);
-    }
-
-    @Override
-    public int update(String statement, Object parameter) {
-        return updateInternal(statement, parameter);
-    }
-
-    @Override
-    public int delete(String statement, Object parameter) {
-        return updateInternal(statement, parameter);
-    }
-
-    @Override
-    public void clearCache() {
-        localCache.clear();
-    }
-
-    // ----------------------------------------------------- private scope
 
     private int updateInternal(String statement, Object parameter) {
         int updateResult = 0;
