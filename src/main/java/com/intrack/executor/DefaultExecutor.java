@@ -40,6 +40,9 @@ public class DefaultExecutor implements Executor {
         this.statementHandler = new DefaultStatementHandler();
         this.transaction = new JdbcTransactionFactory().newTransaction(configuration.getDataSource(), null, true);
 
+        /* 设置connection连接池 */
+        this.transaction.setConnectionPool(configuration.getConnectionPool());
+
         /* 设置一级缓存 */
         localCache = new DefaultCache();
     }

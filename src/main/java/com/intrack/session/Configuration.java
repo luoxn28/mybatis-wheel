@@ -1,5 +1,7 @@
 package com.intrack.session;
 
+import com.intrack.executor.connection.ConnectionPool;
+import com.intrack.executor.connection.DefaultConnectionPoll;
 import com.intrack.executor.datasource.DefaultDataSource;
 import com.intrack.mapping.Environment;
 import com.intrack.mapping.MappedStatement;
@@ -16,6 +18,8 @@ public class Configuration {
     protected Environment environment;
 
     private static BasicDataSource dataSource = new DefaultDataSource();
+
+    private ConnectionPool connectionPool = new DefaultConnectionPoll(dataSource);
 
     protected Map<String, MappedStatement> mappedStatementMap = new ConcurrentHashMap<>();
 
@@ -50,5 +54,9 @@ public class Configuration {
 
     public static void setDataSource(BasicDataSource dataSource) {
         Configuration.dataSource = dataSource;
+    }
+
+    public ConnectionPool getConnectionPool() {
+        return connectionPool;
     }
 }

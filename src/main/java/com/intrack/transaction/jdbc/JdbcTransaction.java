@@ -39,8 +39,12 @@ public class JdbcTransaction implements Transaction {
         this.dataSource = dataSource;
         this.level = level;
         this.autoCommit = autoCommit;
+        this.connectionPool = null;
+    }
 
-        this.connectionPool = new DefaultConnectionPoll(dataSource);
+    @Override
+    public void setConnectionPool(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
     }
 
     @Override
@@ -80,8 +84,14 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Closing JDBC Connection [" + connection + "]");
             }
 
-            /* For use connection next time */
-            connectionPool.release(connection);
+            if (connectionPool != null) {
+                /* For use connection next time */
+                connectionPool.release(connection);
+            } else {
+                connection.close();
+            }
+
+            connection = null;
         }
     }
 
@@ -100,7 +110,12 @@ public class JdbcTransaction implements Transaction {
             log.debug("Opening JDBC Connection.");
         }
 
-        connection = connectionPool.getConnection();
+        if (connectionPool != null) {
+            connection = connectionPool.getConnection();
+        } else {
+            connection = dataSource.getConnection();
+        }
+
         if (level != null) {
             connection.setTransactionIsolation(level.getLevel());
         }
