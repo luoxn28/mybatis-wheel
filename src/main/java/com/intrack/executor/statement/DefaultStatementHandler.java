@@ -1,13 +1,14 @@
 package com.intrack.executor.statement;
 
-import com.intrack.mapping.MappedStatement;
+import com.intrack.executor.ExecutorException;
+import com.intrack.type.TypeException;
 import com.intrack.type.TypeHandler;
 import com.intrack.type.TypeHandlerRegistry;
 import com.intrack.type.UnknownTypeHandler;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * @author intrack
@@ -33,14 +34,14 @@ public class DefaultStatementHandler implements StatementHandler {
     }
 
     @Override
-    public String prepare(String statement, Object parameter) throws SQLException {
-        if (parameter == null) {
-            return "";
+    public PreparedStatement prepare(String statement, Object parameter, Connection connection) throws SQLException {
+        if (!statement.contains("#")) {
+            throw new ExecutorException("statement has not '#'");
         }
 
         TypeHandler<?> typeHandler = TypeHandlerRegistry.getTypeHandler(parameter.getClass());
 
-        return ((UnknownTypeHandler)typeHandler).setNonNullString(statement, parameter);
+        return ((UnknownTypeHandler)typeHandler).setNonNullString(statement, parameter, connection);
     }
 
 }

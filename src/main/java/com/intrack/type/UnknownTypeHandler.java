@@ -1,9 +1,8 @@
 package com.intrack.type;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +32,10 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
         return null;
     }
 
-    public String setNonNullString(String statement, Object parameter)
+    public PreparedStatement setNonNullString(String statement, Object parameter, Connection connection)
             throws SQLException {
-        if (!statement.contains("#")) {
-            return statement;
-        }
-
-        System.out.println(statement);
-        System.out.println(parameter);
-
         List<String> names = new ArrayList<>();
+        StringBuffer stringBuffer = new StringBuffer();
 
         boolean start = false;
         int left = 0;
@@ -56,18 +49,53 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
                 if (start == true) {
                     start = false;
                     names.add(statement.substring(left, i));
+                    stringBuffer.append('?');
+                }
+
+                if (start != true) {
+                    stringBuffer.append(statement.charAt(i));
                 }
             } else if (i == length - 1){
                 if (start == true) {
                     start = false;
                     names.add(statement.substring(left, length));
+                    stringBuffer.append('?');
+                }
+            } else {
+
+                if (start != true) {
+                    stringBuffer.append(statement.charAt(i));
                 }
             }
         }
 
-        System.out.println(names);
+        PreparedStatement preparedStatement = connection.prepareStatement(stringBuffer.toString());
 
-        return "select * from users where id = 3";
+        int index = 1;
+        while (!names.isEmpty()) {
+            String filedName = names.remove(0);
+            PropertyDescriptor descriptor = null;
+
+            try {
+                descriptor = new PropertyDescriptor(filedName, parameter.getClass());
+                Method method = descriptor.getReadMethod();
+
+                if (method == null) {
+                    throw new TypeException("UnknownTypeHandler method is null");
+                }
+
+                Object value = method.invoke(parameter);
+
+                TypeHandler<?> typeHandler = TypeHandlerRegistry.getTypeHandler(value.getClass());
+
+                typeHandler.setParameter(preparedStatement, index++, value, null);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return preparedStatement;
     }
 
 }

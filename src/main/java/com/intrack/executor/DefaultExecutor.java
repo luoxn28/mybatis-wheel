@@ -106,9 +106,7 @@ public class DefaultExecutor implements Executor {
                 statementHandler.prepare(preparedStatement, parameter);
                 preparedStatement.executeQuery();
             } else {
-                resultStatementSql = statementHandler.prepare(resultStatementSql, parameter);
-
-                preparedStatement = connection.prepareStatement(resultStatementSql);
+                preparedStatement = statementHandler.prepare(resultStatementSql, parameter, connection);
                 preparedStatement.executeQuery();
             }
         } catch (SQLException e) {

@@ -1,5 +1,6 @@
 package com.intrack.executor.statement;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -15,6 +16,6 @@ public interface StatementHandler {
 
     void prepare(PreparedStatement preparedStatement, Object parameter) throws SQLException;
 
-    String prepare(String statement, Object parameter) throws SQLException;
+    PreparedStatement prepare(String statement, Object parameter, Connection connection) throws SQLException;
 
 }
