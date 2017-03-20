@@ -22,7 +22,7 @@ public class MappedStatement {
 
     {
         statements.put("com.intrack.test.UserDao.getUser", "select * from users where id = 1");
-        statements.put("com.intrack.test.UserDao.getUserById", "select * from users where id = ?");
+        statements.put("com.intrack.test.UserDao.getUserById", "select * from users where id = #id");
         statements.put("com.intrack.test.UserDao.getUsersById", "select * from users where id > ?");
 
         statements.put("com.intrack.test.UserDao.insertOne", "insert users (id, name) value(5, 'kai')");

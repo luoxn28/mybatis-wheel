@@ -96,12 +96,21 @@ public class DefaultExecutor implements Executor {
         }
 
         try {
-            connection = transaction.getConnection();
-            preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statementSql));
-
             statementHandler.resetStartIndex();
-            statementHandler.prepare(preparedStatement, parameter);
-            preparedStatement.executeQuery();
+
+            connection = transaction.getConnection();
+            String resultStatementSql = mappedStatement.getStatement(statementSql);
+            if (!isUnknownTypeStatement(resultStatementSql)) {
+                preparedStatement = connection.prepareStatement(resultStatementSql);
+
+                statementHandler.prepare(preparedStatement, parameter);
+                preparedStatement.executeQuery();
+            } else {
+                resultStatementSql = statementHandler.prepare(resultStatementSql, parameter);
+
+                preparedStatement = connection.prepareStatement(resultStatementSql);
+                preparedStatement.executeQuery();
+            }
         } catch (SQLException e) {
             try {
                 /* Transaction rollback */
@@ -187,6 +196,13 @@ public class DefaultExecutor implements Executor {
         }
 
         return statement.hashCode() * parameter.hashCode() + statement.hashCode() % 16;
+    }
+
+    /**
+     * 如果statement声明职工包含字符'#'，则表示该statement的parameter为对象中的某个属性值
+     */
+    private boolean isUnknownTypeStatement(String statement) {
+        return (statement.indexOf('#') != -1);
     }
 
 }

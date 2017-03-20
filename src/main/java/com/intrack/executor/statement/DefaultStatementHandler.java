@@ -3,6 +3,7 @@ package com.intrack.executor.statement;
 import com.intrack.mapping.MappedStatement;
 import com.intrack.type.TypeHandler;
 import com.intrack.type.TypeHandlerRegistry;
+import com.intrack.type.UnknownTypeHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -29,6 +30,17 @@ public class DefaultStatementHandler implements StatementHandler {
         TypeHandler<?> typeHandler = TypeHandlerRegistry.getTypeHandler(parameter.getClass());
 
         typeHandler.setParameter(preparedStatement, startIndex++, parameter, null);
+    }
+
+    @Override
+    public String prepare(String statement, Object parameter) throws SQLException {
+        if (parameter == null) {
+            return "";
+        }
+
+        TypeHandler<?> typeHandler = TypeHandlerRegistry.getTypeHandler(parameter.getClass());
+
+        return ((UnknownTypeHandler)typeHandler).setNonNullString(statement, parameter);
     }
 
 }

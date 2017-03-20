@@ -33,17 +33,21 @@ public class TypeHandlerRegistry {
         register(Object.class, JdbcType.JAVA_OBJECT, new ObjectTypeHandler());
         register(Short.class, JdbcType.SMALLINT, new ShortTypeHandler());
         register(String.class, JdbcType.VARCHAR, new StringTypeHandler());
+        register(Object.class, JdbcType.VARCHAR, new ObjectTypeHandler());
     }
 
     public static TypeHandler<?> getTypeHandler(Type type) {
         TypeHandler<?> typeHandler = null;
 
         typeHandler = TYPE_HANDLER_MAP.get(type);
-        if (typeHandler == null) {
-            throw new TypeException("type handler is null.");
+        if (typeHandler != null) {
+            return typeHandler;
+        } else {
+            /**
+             * 如果typeHandler为null，则表示为type为用户自定义的类
+             */
+            return new UnknownTypeHandler();
         }
-
-        return typeHandler;
     }
 
     public static TypeHandler<?> getTypeHandler(JdbcType jdbcType) {
