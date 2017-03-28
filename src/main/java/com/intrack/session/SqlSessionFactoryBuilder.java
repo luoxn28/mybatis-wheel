@@ -1,5 +1,7 @@
 package com.intrack.session;
 
+import com.intrack.io.XMLConfigBuilder;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Properties;
@@ -16,8 +18,10 @@ public class SqlSessionFactoryBuilder {
         return build(stream, null, null);
     }
 
-    public SqlSessionFactory build(InputStream stream, String environment, Properties properties) {
-        return build(new Configuration());
+    public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
+        XMLConfigBuilder configBuilder = new XMLConfigBuilder(inputStream, environment, properties);
+
+        return build(configBuilder.parse());
     }
 
     public SqlSessionFactory build(Reader reader) {
