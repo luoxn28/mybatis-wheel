@@ -36,7 +36,24 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
             throws SQLException {
         List<String> names = new ArrayList<>();
         StringBuffer stringBuffer = new StringBuffer();
+        PreparedStatement preparedStatement = null;
 
+        if (!convertStatement(statement, stringBuffer, names)) {
+            preparedStatement = connection.prepareStatement(statement);
+
+        } else {
+            preparedStatement = getPreparedStatementByNonNullString(stringBuffer, names, parameter, connection);
+        }
+
+        return preparedStatement;
+    }
+
+    // ----------------------------------------------------- private scope
+
+    /**
+     * Convert statement sql. #{xxx} -> ? & xxx
+     */
+    private boolean convertStatement(String statement, StringBuffer stringBuffer, List<String> names) {
         boolean start = false;
         int left = 0;
         int length = statement.length();
@@ -69,6 +86,15 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Get PreparedStatement by statement sql and names list.
+     */
+    private PreparedStatement getPreparedStatementByNonNullString(StringBuffer stringBuffer, List<String> names,
+                                                                  Object parameter, Connection connection)
+            throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(stringBuffer.toString());
 
         int index = 1;
