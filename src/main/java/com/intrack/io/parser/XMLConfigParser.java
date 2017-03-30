@@ -12,6 +12,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author intrack
@@ -30,7 +32,13 @@ public class XMLConfigParser {
 
     public Configuration parse() {
         initParser();
-        
+
+        Element configurationNode = configurationNode();
+        Element mappersNode = mappersNode(configurationNode);
+
+        List<String> mappers = parseAllMapper(mappersNode);
+        System.out.println(mappers);
+
         return null;
     }
 
@@ -51,39 +59,33 @@ public class XMLConfigParser {
         }
     }
 
-    private void parseInternal() {
-        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
-
-        try {
-            builder = factory.newDocumentBuilder();
-            Document document = builder.parse(inputStream);
-
-            NodeList nodeList = document.getElementsByTagName("configuration");
-            if (nodeList.getLength() != 1) {
-                throw new BuilderException("configuration is only node in config file.");
-            }
-
-            Element configurationNode = (Element) nodeList.item(0);
-            nodeList = configurationNode.getElementsByTagName("mappers");
-            if (nodeList.getLength() != 1) {
-                throw new BuilderException("mappers is only node in config file.");
-            }
-
-            Element mappersNode = (Element) nodeList.item(0);
-            NodeList mapperList = mappersNode.getElementsByTagName("mapper");
-            for (int i = 0; i < mapperList.getLength(); i++) {
-                System.out.println(mapperList.item(i).getAttributes().getNamedItem("resource").getNodeValue());
-            }
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private Element configurationNode() {
+        NodeList nodeList = document.getElementsByTagName("configuration");
+        if (nodeList.getLength() != 1) {
+            throw new BuilderException("configuration is only node in config file.");
         }
 
-
+        return (Element) nodeList.item(0);
     }
+
+    private Element mappersNode(Element configurationNode) {
+        NodeList nodeList = configurationNode.getElementsByTagName("mappers");
+        if (nodeList.getLength() != 1) {
+            throw new BuilderException("mappers is only node in config file.");
+        }
+
+        return (Element) nodeList.item(0);
+    }
+
+    private List<String> parseAllMapper(Element mappersNode) {
+        List<String> mappers = new ArrayList<>();
+
+        NodeList mapperList = mappersNode.getElementsByTagName("mapper");
+        for (int i = 0; i < mapperList.getLength(); i++) {
+            mappers.add(mapperList.item(i).getAttributes().getNamedItem("resource").getNodeValue());
+        }
+
+        return mappers;
+    }
+    
 }
