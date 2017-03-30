@@ -2,6 +2,8 @@ package com.intrack.session;
 
 import com.intrack.io.XMLConfigBuilder;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Properties;
@@ -14,6 +16,11 @@ public class SqlSessionFactoryBuilder {
     /**
      * Build session factory according to configuration file
      */
+    public SqlSessionFactory build(String filename) throws FileNotFoundException {
+        //InputStream inputStream = new FileInputStream("F:\\idea_java_codes\\mybatis-wheel\\src\\main\\resources\\mybatis.xml");
+        return build(new FileInputStream(filename));
+    }
+
     public SqlSessionFactory build(InputStream stream) {
         return build(stream, null, null);
     }
