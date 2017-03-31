@@ -4,7 +4,7 @@
 <configuration>
 
     <mappers>
-        <mapper resource="userMapper.xml"/>
+        <mapper resource="F:\idea_java_codes\mybatis-wheel\src\main\resources\userMapper.xml"/>
     </mappers>
 
 </configuration>
