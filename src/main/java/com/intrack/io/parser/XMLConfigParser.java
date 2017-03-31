@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,7 +38,17 @@ public class XMLConfigParser {
         Element mappersNode = mappersNode(configurationNode);
 
         List<String> mappers = parseAllMapper(mappersNode);
-        System.out.println(mappers);
+        if (mappers.size() > 0) {
+            XMLMapperParser mapperParser = new XMLMapperParser(configuration);
+            for (String mapper : mappers) {
+                System.out.println(mapper);
+                try {
+                    mapperParser.parse(mapper);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         return null;
     }
@@ -59,6 +70,9 @@ public class XMLConfigParser {
         }
     }
 
+    /**
+     * Parse configuration node.
+     */
     private Element configurationNode() {
         NodeList nodeList = document.getElementsByTagName("configuration");
         if (nodeList.getLength() != 1) {
@@ -68,6 +82,9 @@ public class XMLConfigParser {
         return (Element) nodeList.item(0);
     }
 
+    /**
+     * Parse mappers node.
+     */
     private Element mappersNode(Element configurationNode) {
         NodeList nodeList = configurationNode.getElementsByTagName("mappers");
         if (nodeList.getLength() != 1) {
@@ -77,6 +94,9 @@ public class XMLConfigParser {
         return (Element) nodeList.item(0);
     }
 
+    /**
+     * Parse all mapper nodes.
+     */
     private List<String> parseAllMapper(Element mappersNode) {
         List<String> mappers = new ArrayList<>();
 
@@ -87,5 +107,5 @@ public class XMLConfigParser {
 
         return mappers;
     }
-    
+
 }

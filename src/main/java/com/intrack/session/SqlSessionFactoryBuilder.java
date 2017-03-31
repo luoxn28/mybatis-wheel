@@ -17,7 +17,6 @@ public class SqlSessionFactoryBuilder {
      * Build session factory according to configuration file
      */
     public SqlSessionFactory build(String filename) throws FileNotFoundException {
-        //InputStream inputStream = new FileInputStream("F:\\idea_java_codes\\mybatis-wheel\\src\\main\\resources\\mybatis.xml");
         return build(new FileInputStream(filename));
     }
 
