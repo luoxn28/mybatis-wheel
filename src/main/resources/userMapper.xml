@@ -7,4 +7,18 @@
         SELECT * FROM blog WHERE id=#{id}
     </select>
 
+    <insert id="insert" parameterType="com.luoxn28.blog.dao.Blog">
+        INSERT blog (title, text, preview, author, category, date)
+        VALUES (#{title}, #{text}, #{preview}, #{author}, #{category}, #{date})
+    </insert>
+
+    <update id="update" parameterType="com.luoxn28.blog.dao.Blog">
+        UPDATE blog set title=#{title}, text=#{text}, preview=#{preview}, author=#{author},
+        category=#{category}, date=#{date} where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM blog WHERE id=#{id}
+    </delete>
+
 </mapper>

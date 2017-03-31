@@ -89,7 +89,27 @@ public class XMLMapperParser {
         NodeList selectList = mapperNode.getElementsByTagName("select");
         for (int i = 0; i < selectList.getLength(); i++) {
             MapperNode node = new MapperNode("select", namespace, selectList.item(i));
+            mapperNodeMap.put(node.getId(), node);
+        }
 
+        /* parse update node */
+        NodeList updateList = mapperNode.getElementsByTagName("update");
+        for (int i = 0; i < updateList.getLength(); i++) {
+            MapperNode node = new MapperNode("update", namespace, updateList.item(i));
+            mapperNodeMap.put(node.getId(), node);
+        }
+
+        /* parse insert node */
+        NodeList insertList = mapperNode.getElementsByTagName("insert");
+        for (int i = 0; i < insertList.getLength(); i++) {
+            MapperNode node = new MapperNode("insert", namespace, insertList.item(i));
+            mapperNodeMap.put(node.getId(), node);
+        }
+
+        /* parse delete node */
+        NodeList deleteList = mapperNode.getElementsByTagName("delete");
+        for (int i = 0; i < deleteList.getLength(); i++) {
+            MapperNode node = new MapperNode("delete", namespace, deleteList.item(i));
             mapperNodeMap.put(node.getId(), node);
         }
 

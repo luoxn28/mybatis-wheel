@@ -76,20 +76,45 @@ public class MapperNode {
         this.resultType = resultType;
     }
 
+    @Override
+    public String toString() {
+        return "MapperNode{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", parameterType='" + parameterType + '\'' +
+                ", resultType='" + resultType + '\'' +
+                '}';
+    }
+
     // ----------------------------------------------------- private scope
 
     /* Get id attribute */
     private String getId(Node node) {
-        return node.getAttributes().getNamedItem("id").getNodeValue();
+        Node id = node.getAttributes().getNamedItem("id");
+        if (id != null) {
+            return id.getNodeValue();
+        } else {
+            return null;
+        }
     }
 
     /* Get parameterType attribute */
     private String getParameterType(Node node) {
-        return node.getAttributes().getNamedItem("parameterType").getNodeValue();
+        Node parameterType = node.getAttributes().getNamedItem("parameterType");
+        if (parameterType != null) {
+            return parameterType.getNodeValue();
+        } else {
+            return null;
+        }
     }
 
     /* Get resultType attribute */
     private String getResultType(Node node) {
-        return node.getAttributes().getNamedItem("resultType").getNodeValue();
+        Node resultType = node.getAttributes().getNamedItem("resultType");
+        if (resultType != null) {
+            return resultType.getNodeValue();
+        } else {
+            return null;
+        }
     }
 }
