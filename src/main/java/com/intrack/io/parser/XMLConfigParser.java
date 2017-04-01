@@ -41,7 +41,6 @@ public class XMLConfigParser {
         if (mappers.size() > 0) {
             XMLMapperParser mapperParser = new XMLMapperParser(configuration);
             for (String mapper : mappers) {
-                System.out.println("> " + mapper);
                 try {
                     mapperParser.parse(mapper);
                 } catch (FileNotFoundException e) {
@@ -50,7 +49,7 @@ public class XMLConfigParser {
             }
         }
 
-        return null;
+        return configuration;
     }
 
     // ----------------------------------------------------- private scope

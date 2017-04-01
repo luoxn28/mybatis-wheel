@@ -1,6 +1,7 @@
 package com.intrack.session;
 
 import com.intrack.io.XMLConfigBuilder;
+import com.intrack.session.defaults.DefaultSqlSessionFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,7 +40,8 @@ public class SqlSessionFactoryBuilder {
     }
 
     public SqlSessionFactory build(Configuration configuration) {
-        return null;
+
+        return new DefaultSqlSessionFactory(configuration);
     }
 
 }

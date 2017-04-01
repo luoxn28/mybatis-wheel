@@ -64,7 +64,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionIsolationLevel level,
                                                  boolean autoCommit) {
 
-        return new DefaultSqlSession(null);
+        return new DefaultSqlSession(configuration);
     }
 
     private SqlSession openSessionFromConnection(ExecutorType execType, Connection connection) {

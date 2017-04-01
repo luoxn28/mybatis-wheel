@@ -1,5 +1,7 @@
 package com.intrack.io.parser;
 
+import com.intrack.io.BuilderException;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -11,6 +13,7 @@ public class MapperNode {
     private String id;
     private String parameterType;
     private String resultType;
+    private String sql;
 
     public MapperNode(String name) {
         this("", null);
@@ -41,6 +44,7 @@ public class MapperNode {
             this.id = namespace + "." + getId(node);
             this.parameterType = getParameterType(node);
             this.resultType = getResultType(node);
+            this.sql = getSql(node);
         }
     }
 
@@ -76,6 +80,14 @@ public class MapperNode {
         this.resultType = resultType;
     }
 
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
+
     @Override
     public String toString() {
         return "MapperNode{" +
@@ -83,6 +95,7 @@ public class MapperNode {
                 ", id='" + id + '\'' +
                 ", parameterType='" + parameterType + '\'' +
                 ", resultType='" + resultType + '\'' +
+                ", sql='" + sql + '\'' +
                 '}';
     }
 
@@ -117,4 +130,15 @@ public class MapperNode {
             return null;
         }
     }
+
+    /* Get sql value */
+    private String getSql(Node node) {
+        Node sqlNode = node.getFirstChild();
+        if (sqlNode != null) {
+            return sqlNode.getNodeValue().trim();
+        } else {
+            throw new BuilderException("Not find sql in mapper config file.");
+        }
+    }
+
 }

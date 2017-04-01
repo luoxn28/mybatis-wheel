@@ -3,8 +3,8 @@
 
 <mapper namespace="com.intrack.test.UserDao">
 
-    <select id="getById" parameterType="int" resultType="com.luoxn28.blog.dao.Blog">
-        SELECT * FROM blog WHERE id=#{id}
+    <select id="getUserById" parameterType="int" resultType="com.luoxn28.blog.dao.Blog">
+        select * from users where id = #id and name = #name
     </select>
 
     <insert id="insert" parameterType="com.luoxn28.blog.dao.Blog">

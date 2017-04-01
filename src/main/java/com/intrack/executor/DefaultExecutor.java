@@ -78,7 +78,7 @@ public class DefaultExecutor implements Executor {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        MappedStatement mappedStatement = configuration.getMappedStatement(statementSql);
+        MappedStatement mappedStatement = configuration.getMappedStatement();
         /* 查询二级缓存 */
         Cache cache = mappedStatement.getCache();
         Integer hashCode = createHashcode(statementSql, parameter);
@@ -155,7 +155,7 @@ public class DefaultExecutor implements Executor {
         PreparedStatement preparedStatement = null;
 
         try {
-            MappedStatement mappedStatement = configuration.getMappedStatement(statement);
+            MappedStatement mappedStatement = configuration.getMappedStatement();
 
             connection = transaction.getConnection();
             preparedStatement = connection.prepareStatement(mappedStatement.getStatement(statement));

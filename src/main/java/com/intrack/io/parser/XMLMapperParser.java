@@ -90,6 +90,7 @@ public class XMLMapperParser {
         for (int i = 0; i < selectList.getLength(); i++) {
             MapperNode node = new MapperNode("select", namespace, selectList.item(i));
             mapperNodeMap.put(node.getId(), node);
+            configuration.addMapperNode(node);
         }
 
         /* parse update node */
@@ -97,6 +98,7 @@ public class XMLMapperParser {
         for (int i = 0; i < updateList.getLength(); i++) {
             MapperNode node = new MapperNode("update", namespace, updateList.item(i));
             mapperNodeMap.put(node.getId(), node);
+            configuration.addMapperNode(node);
         }
 
         /* parse insert node */
@@ -104,6 +106,7 @@ public class XMLMapperParser {
         for (int i = 0; i < insertList.getLength(); i++) {
             MapperNode node = new MapperNode("insert", namespace, insertList.item(i));
             mapperNodeMap.put(node.getId(), node);
+            configuration.addMapperNode(node);
         }
 
         /* parse delete node */
@@ -111,6 +114,7 @@ public class XMLMapperParser {
         for (int i = 0; i < deleteList.getLength(); i++) {
             MapperNode node = new MapperNode("delete", namespace, deleteList.item(i));
             mapperNodeMap.put(node.getId(), node);
+            configuration.addMapperNode(node);
         }
 
         return mapperNodeMap;

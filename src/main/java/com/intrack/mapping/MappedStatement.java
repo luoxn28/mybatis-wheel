@@ -22,7 +22,7 @@ public class MappedStatement {
 
     {
         statements.put("com.intrack.test.UserDao.getUser", "select * from users where id = 1");
-        statements.put("com.intrack.test.UserDao.getUserById", "select * from users where id = #id and name = #name");
+        //statements.put("com.intrack.test.UserDao.getUserById", "select * from users where id = #id and name = #name");
         statements.put("com.intrack.test.UserDao.getUsersById", "select * from users where id > ?");
 
         statements.put("com.intrack.test.UserDao.insertOne", "insert users (id, name) value(5, 'kai')");
@@ -38,12 +38,18 @@ public class MappedStatement {
         cache = new DefaultCache();
     }
 
+    public void addStatement(String key, String value) {
+        statements.put(key, value);
+    }
+
     public String getStatement(String key) {
+        System.out.println(statements.size());
         String value = statements.get(key);
         if (value == null) {
             throw new MappingException("MappedStatement get statement null");
         }
 
+        System.out.println("------ " + key + ": " + value);
         return value;
     }
 
