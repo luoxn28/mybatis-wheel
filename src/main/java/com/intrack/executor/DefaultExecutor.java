@@ -132,7 +132,7 @@ public class DefaultExecutor implements Executor {
             if ((resultClassUrl == null) || (resultClassUrl.isEmpty())) {
                 throw new ExecutorException("Not find resultClassUrl");
             }
-            
+
             userList = resultSetHandler.handlerResultSets(Class.forName(resultClassUrl));
         } catch (SQLException e) {
             e.printStackTrace();
