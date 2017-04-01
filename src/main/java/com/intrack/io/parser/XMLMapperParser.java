@@ -40,9 +40,11 @@ public class XMLMapperParser {
         initParser(inputStream);
 
         Element mapperNode = mapperNode();
-        Map<String, MapperNode> mapperNodeMap = parseAllNodes(mapperNode);
 
-        System.out.println(mapperNodeMap);
+        /**
+         * Parse all statement. put it to configuration.
+         */
+        parseAllNodes(mapperNode);
     }
 
     // ----------------------------------------------------- private scope
@@ -77,19 +79,17 @@ public class XMLMapperParser {
     /**
      * Parse all mapper nodes.
      */
-    private Map<String, MapperNode> parseAllNodes(Element mapperNode) {
+    private void parseAllNodes(Element mapperNode) {
         if (!mapperNode.hasAttribute("namespace")) {
             throw new BuilderException("not find namespace attribute.");
         }
 
         String namespace = mapperNode.getAttribute("namespace");
-        Map<String, MapperNode> mapperNodeMap = new HashMap<>();
 
         /* parse select nodes */
         NodeList selectList = mapperNode.getElementsByTagName("select");
         for (int i = 0; i < selectList.getLength(); i++) {
             MapperNode node = new MapperNode("select", namespace, selectList.item(i));
-            mapperNodeMap.put(node.getId(), node);
             configuration.addMapperNode(node);
         }
 
@@ -97,7 +97,6 @@ public class XMLMapperParser {
         NodeList updateList = mapperNode.getElementsByTagName("update");
         for (int i = 0; i < updateList.getLength(); i++) {
             MapperNode node = new MapperNode("update", namespace, updateList.item(i));
-            mapperNodeMap.put(node.getId(), node);
             configuration.addMapperNode(node);
         }
 
@@ -105,7 +104,6 @@ public class XMLMapperParser {
         NodeList insertList = mapperNode.getElementsByTagName("insert");
         for (int i = 0; i < insertList.getLength(); i++) {
             MapperNode node = new MapperNode("insert", namespace, insertList.item(i));
-            mapperNodeMap.put(node.getId(), node);
             configuration.addMapperNode(node);
         }
 
@@ -113,11 +111,8 @@ public class XMLMapperParser {
         NodeList deleteList = mapperNode.getElementsByTagName("delete");
         for (int i = 0; i < deleteList.getLength(); i++) {
             MapperNode node = new MapperNode("delete", namespace, deleteList.item(i));
-            mapperNodeMap.put(node.getId(), node);
             configuration.addMapperNode(node);
         }
-
-        return mapperNodeMap;
     }
 
 

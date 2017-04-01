@@ -22,8 +22,6 @@ public class Configuration {
 
     private ConnectionPool connectionPool = new DefaultConnectionPoll(dataSource);
 
-//    protected Map<String, MappedStatement> mappedStatement = new ConcurrentHashMap<>();
-
     protected MappedStatement mappedStatement = new MappedStatement();
 
     /**
@@ -34,10 +32,6 @@ public class Configuration {
 
     protected ExecutorType executorType = getDefaultExecutorType();
 
-    {
-//        mappedStatement.put("com.intrack.test.UserDao", new MappedStatement());
-    }
-
     public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
@@ -46,21 +40,9 @@ public class Configuration {
         return ExecutorType.SIMPLE;
     }
 
-//    public MappedStatement getMappedStatement(String statement) {
-//        String namespace = statement.substring(0, statement.lastIndexOf('.'));
-//
-//        MappedStatement mappedStatement = this.mappedStatement.get(namespace);
-//        if (mappedStatement == null) {
-//            throw new SqlSessionException("Configuration getMappedStatement null");
-//        }
-//
-//        return mappedStatement;
-//    }
-
     public void addMapperNode(MapperNode mapperNode) {
         mappedMapperNode.put(mapperNode.getId(), mapperNode);
         mappedStatement.addStatement(mapperNode.getId(), mapperNode.getSql());
-        System.out.println(mapperNode.getId() + ": " + mapperNode.getSql());
     }
 
     public MappedStatement getMappedStatement() {

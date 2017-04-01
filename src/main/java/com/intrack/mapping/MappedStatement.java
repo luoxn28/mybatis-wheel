@@ -43,13 +43,11 @@ public class MappedStatement {
     }
 
     public String getStatement(String key) {
-        System.out.println(statements.size());
         String value = statements.get(key);
         if (value == null) {
             throw new MappingException("MappedStatement get statement null");
         }
 
-        System.out.println("------ " + key + ": " + value);
         return value;
     }
 
