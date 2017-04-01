@@ -3,22 +3,26 @@
 
 <mapper namespace="com.intrack.test.UserDao">
 
-    <select id="getUserById" parameterType="int" resultType="com.luoxn28.blog.dao.Blog">
+    <select id="getUserById" parameterType="com.intrack.test.User" resultType="com.intrack.test.User">
         select * from users where id = #id and name = #name
     </select>
 
-    <insert id="insert" parameterType="com.luoxn28.blog.dao.Blog">
-        INSERT blog (title, text, preview, author, category, date)
-        VALUES (#{title}, #{text}, #{preview}, #{author}, #{category}, #{date})
-    </insert>
+    <select id="getUser" parameterType="int" resultType="com.intrack.test.User">
+        select * from users where id = 1
+    </select>
 
-    <update id="update" parameterType="com.luoxn28.blog.dao.Blog">
-        UPDATE blog set title=#{title}, text=#{text}, preview=#{preview}, author=#{author},
-        category=#{category}, date=#{date} where id=#{id}
-    </update>
+    <!--<insert id="insert" parameterType="com.luoxn28.blog.dao.Blog">-->
+        <!--INSERT blog (title, text, preview, author, category, date)-->
+        <!--VALUES (#{title}, #{text}, #{preview}, #{author}, #{category}, #{date})-->
+    <!--</insert>-->
 
-    <delete id="delete" parameterType="int">
-        DELETE FROM blog WHERE id=#{id}
-    </delete>
+    <!--<update id="update" parameterType="com.luoxn28.blog.dao.Blog">-->
+        <!--UPDATE blog set title=#{title}, text=#{text}, preview=#{preview}, author=#{author},-->
+        <!--category=#{category}, date=#{date} where id=#{id}-->
+    <!--</update>-->
+
+    <!--<delete id="delete" parameterType="int">-->
+        <!--DELETE FROM blog WHERE id=#{id}-->
+    <!--</delete>-->
 
 </mapper>

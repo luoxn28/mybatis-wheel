@@ -7,6 +7,7 @@ import com.intrack.executor.resultset.ResultSetHandler;
 import com.intrack.executor.resultset.ResultSetWrapper;
 import com.intrack.executor.statement.DefaultStatementHandler;
 import com.intrack.executor.statement.StatementHandler;
+import com.intrack.io.parser.MapperNode;
 import com.intrack.mapping.MappedStatement;
 import com.intrack.session.Configuration;
 import com.intrack.session.SqlSessionException;
@@ -126,8 +127,16 @@ public class DefaultExecutor implements Executor {
 
         List<E> userList = null;
         try {
-            userList = resultSetHandler.handlerResultSets(User.class);
+            MapperNode mapperNode = configuration.getMapperNode(statementSql);
+            String resultClassUrl = mapperNode.getResultType();
+            if ((resultClassUrl == null) || (resultClassUrl.isEmpty())) {
+                throw new ExecutorException("Not find resultClassUrl");
+            }
+            
+            userList = resultSetHandler.handlerResultSets(Class.forName(resultClassUrl));
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             try {

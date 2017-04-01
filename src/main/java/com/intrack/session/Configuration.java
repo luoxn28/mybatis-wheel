@@ -49,6 +49,16 @@ public class Configuration {
         return this.mappedStatement;
     }
 
+    public MapperNode getMapperNode(String id) {
+        MapperNode mapperNode = mappedMapperNode.get(id);
+
+        if (mapperNode != null) {
+            return mapperNode;
+        } else {
+            throw new SqlSessionException("Not find mapperNode.");
+        }
+    }
+
     public static BasicDataSource getDataSource() {
         return dataSource;
     }
