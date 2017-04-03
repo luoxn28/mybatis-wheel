@@ -4,11 +4,11 @@ import com.intrack.executor.connection.ConnectionPool;
 import com.intrack.executor.connection.DefaultConnectionPoll;
 import com.intrack.executor.datasource.DefaultDataSource;
 import com.intrack.io.parser.MapperNode;
+import com.intrack.logging.Log;
 import com.intrack.logging.log4j.Log4jImpl;
 import com.intrack.mapping.Environment;
 import com.intrack.mapping.MappedStatement;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.logging.Log;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Configuration {
 
-    public static Log4jImpl log = new Log4jImpl("mybatis-wheel");
+    public static Log log = new Log4jImpl("mybatis-wheel");
 
     protected Environment environment;
 
