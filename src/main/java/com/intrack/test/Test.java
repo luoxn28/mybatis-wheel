@@ -33,6 +33,8 @@ public class Test {
         user = sqlSession.selectOne("com.intrack.test.UserDao.getUser");
         System.out.println(user);
 
+        Configuration.log.debug("mybatis-wheel ok");
+
         //user = sqlSession.selectOne("com.intrack.test.UserDao.getUserById", 2);
         //System.out.println(user);
 
